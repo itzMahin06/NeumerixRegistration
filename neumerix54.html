@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEUMERIX-54 | গণিত বিভাগ, আনন্দ মোহন কলেজ</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- html2canvas for HD PNG export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+  :root{
+    --navy:#0a1830;
+    --navy-2:#0f2545;
+    --navy-3:#173463;
+    --gold:#d4af37;
+    --gold-light:#f1df9e;
+    --teal:#17c3a2;
+    --cream:#f7f2e4;
+    --ink:#0b1424;
+    --muted:#93a2c2;
+    --danger:#e2574c;
+    --radius:18px;
+    --shadow-lg: 0 30px 60px -20px rgba(4,10,26,.55);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:'SolaimanLipi', sans-serif;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(23,195,162,.14), transparent 40%),
+      radial-gradient(circle at 85% 0%, rgba(212,175,55,.12), transparent 45%),
+      var(--navy);
+    color:var(--cream);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  .mono{font-family:'Space Mono', monospace;}
+
+  /* ---------- decorative math-symbol backdrop ---------- */
+  .math-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    opacity:.07;
+    font-family:'Space Mono', monospace;
+    font-size:46px;
+    color:var(--gold);
+    line-height:1.4;
+    letter-spacing:22px;
+    overflow:hidden;
+    user-select:none;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 5%;
+    background:rgba(10,24,48,.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(212,175,55,.25);
+  }
+  .brand{display:flex; align-items:center; gap:14px;}
+  .brand img, .brand .logo-fallback{
+    width:46px; height:46px; border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--gold);
+    box-shadow:0 0 0 3px rgba(212,175,55,.15);
+    background:var(--navy-2);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:18px;
+  }
+  .brand-text .name{
+    font-weight:900; font-size:19px; letter-spacing:.5px;
+    background:linear-gradient(90deg,var(--gold-light),var(--teal));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .brand-text .dept{font-size:12px; color:var(--muted); margin-top:1px;}
+
+  nav{display:flex; gap:8px;}
+  nav a{
+    color:var(--cream); text-decoration:none; font-size:14px; font-weight:500;
+    padding:9px 16px; border-radius:999px; transition:.25s;
+    border:1px solid transparent;
+  }
+  nav a:hover, nav a:focus-visible{
+    background:rgba(212,175,55,.12); border-color:rgba(212,175,55,.35); outline:none;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; z-index:1;
+    padding:90px 6% 70px;
+    text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:18px;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; letter-spacing:2px; color:var(--teal);
+    border:1px solid rgba(23,195,162,.4); padding:7px 16px; border-radius:999px;
+    background:rgba(23,195,162,.08);
+  }
+  .hero h1{
+    font-size:clamp(42px, 8vw, 88px);
+    font-weight:900; line-height:1;
+    letter-spacing:-1px;
+  }
+  .hero h1 .num{
+    font-family:'Space Mono', monospace;
+    color:var(--gold);
+    -webkit-text-stroke:1px rgba(212,175,55,.4);
+  }
+  .hero p{
+    max-width:620px; color:var(--muted); font-size:16.5px; line-height:1.8;
+  }
+  .hero-actions{display:flex; gap:14px; margin-top:8px; flex-wrap:wrap; justify-content:center;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:inherit; font-size:15px; font-weight:700;
+    padding:14px 26px; border-radius:12px; border:none; cursor:pointer;
+    transition:.25s transform, .25s box-shadow, .25s background;
+  }
+  .btn-primary{
+    background:linear-gradient(120deg,var(--teal),#0ea88b);
+    color:var(--ink);
+    box-shadow:0 14px 30px -12px rgba(23,195,162,.55);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 18px 34px -10px rgba(23,195,162,.6);}
+  .btn-outline{
+    background:transparent; color:var(--gold-light);
+    border:1.5px solid rgba(212,175,55,.5);
+  }
+  .btn-outline:hover{background:rgba(212,175,55,.1); transform:translateY(-2px);}
+  .btn-ghost{background:transparent; color:var(--muted); border:1px solid rgba(147,162,194,.3);}
+  .btn-ghost:hover{color:var(--cream); border-color:var(--cream);}
+
+  /* ---------- sections shared ---------- */
+  section.panel{
+    position:relative; z-index:1;
+    max-width:920px; margin:0 auto; padding:0 6% 90px;
+  }
+  .section-head{text-align:center; margin-bottom:36px;}
+  .section-head .tag{color:var(--teal); font-size:13px; letter-spacing:3px; font-weight:700;}
+  .section-head h2{font-size:clamp(26px,4vw,38px); font-weight:800; margin-top:8px;}
+  .section-head p{color:var(--muted); margin-top:10px; font-size:15px;}
+
+  /* ---------- form card ---------- */
+  .glass-card{
+    background:linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border:1px solid rgba(212,175,55,.22);
+    border-radius:var(--radius);
+    padding:38px;
+    box-shadow:var(--shadow-lg);
+    backdrop-filter:blur(6px);
+  }
+
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .field{display:flex; flex-direction:column; gap:8px;}
+  .field.full{grid-column:1/-1;}
+  .field label{
+    font-size:13.5px; font-weight:600; color:var(--gold-light);
+    display:flex; align-items:center; gap:8px;
+  }
+  .field label i{width:16px; color:var(--teal);}
+  .field input[type=text], .field input[type=tel], .field select, .field textarea{
+    font-family:inherit; font-size:15px; color:var(--cream);
+    background:rgba(6,14,30,.55);
+    border:1px solid rgba(147,162,194,.28);
+    border-radius:10px; padding:13px 14px;
+    transition:.2s border-color, .2s box-shadow;
+  }
+  .field textarea{resize:vertical; min-height:78px;}
+  .field input::placeholder, .field textarea::placeholder{color:#5b6b8c;}
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(23,195,162,.18);
+  }
+  .field select{appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%2317c3a2' stroke-width='2' fill='none'/></svg>");
+    background-repeat:no-repeat; background-position:right 14px center;
+  }
+
+  .sex-options{display:flex; gap:12px;}
+  .sex-options label{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px; border-radius:10px; border:1px solid rgba(147,162,194,.28);
+    background:rgba(6,14,30,.55); cursor:pointer; font-size:14.5px; font-weight:600;
+    color:var(--muted); transition:.2s;
+  }
+  .sex-options input{display:none;}
+  .sex-options input:checked + span{color:var(--ink);}
+  .sex-options label:has(input:checked){
+    background:linear-gradient(120deg,var(--teal),#0ea88b); border-color:transparent; color:var(--ink);
+  }
+
+  .photo-upload{
+    display:flex; align-items:center; gap:18px;
+    grid-column:1/-1;
+  }
+  .avatar-box{
+    width:88px; height:88px; border-radius:50%; flex-shrink:0;
+    background:rgba(6,14,30,.55); border:2px dashed rgba(212,175,55,.45);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+    color:var(--gold); font-size:22px;
+  }
+  .avatar-box img{width:100%; height:100%; object-fit:cover;}
+  .upload-btn-wrap{display:flex; flex-direction:column; gap:6px;}
+  .upload-btn-wrap input[type=file]{display:none;}
+  .upload-label{
+    display:inline-flex; align-items:center; gap:8px; width:fit-content;
+    padding:10px 18px; border-radius:9px; font-size:13.5px; font-weight:700;
+    background:rgba(212,175,55,.14); color:var(--gold-light); border:1px solid rgba(212,175,55,.4);
+    cursor:pointer; transition:.2s;
+  }
+  .upload-label:hover{background:rgba(212,175,55,.24);}
+  .upload-hint{font-size:11.5px; color:var(--muted);}
+
+  .form-submit-row{grid-column:1/-1; display:flex; justify-content:center; margin-top:8px;}
+  .form-msg{
+    grid-column:1/-1; font-size:13.5px; text-align:center; padding:10px; border-radius:8px;
+    display:none;
+  }
+  .form-msg.show{display:block;}
+  .form-msg.err{background:rgba(226,87,76,.14); color:#ff9c94; border:1px solid rgba(226,87,76,.35);}
+
+  /* ---------- ID CARD ---------- */
+  #cardSection{display:none;}
+  .success-banner{
+    text-align:center; margin-bottom:34px;
+  }
+  .success-banner i{font-size:40px; color:var(--teal); margin-bottom:10px;}
+  .success-banner h2{font-size:26px; font-weight:800;}
+  .success-banner p{color:var(--muted); margin-top:8px; font-size:14.5px;}
+
+  .card-stage{
+    display:flex; justify-content:center; padding:20px 0 10px;
+  }
+
+  /* the actual ID card, fixed CR80-ish ratio */
+  #idCard{
+    width:400px; min-height:250px;
+    background:var(--cream);
+    border-radius:16px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 25px 60px -18px rgba(0,0,0,.65);
+    color:var(--ink);
+    border:1px solid rgba(212,175,55,.5);
+  }
+  .card-watermark{
+    position:absolute; right:-22px; bottom:-42px;
+    font-family:'Space Mono',monospace; font-weight:700;
+    font-size:190px; color:rgba(10,24,48,.05);
+    line-height:1; user-select:none; pointer-events:none;
+  }
+  .card-top{
+    background:linear-gradient(100deg,var(--navy),var(--navy-3));
+    padding:12px 16px; display:flex; align-items:center; gap:10px;
+    border-bottom:3px solid var(--gold);
+    position:relative; z-index:2;
+  }
+  .card-top img.clogo, .card-top .clogo-fallback{
+    width:34px; height:34px; border-radius:50%; object-fit:cover;
+    border:1.5px solid var(--gold); background:var(--navy-2);
+    display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:13px;
+  }
+  .card-top .ctext .cname{
+    font-size:14.5px; font-weight:900; color:var(--gold-light); letter-spacing:.4px;
+  }
+  .card-top .ctext .cdept{font-size:9px; color:#b9c3dc; margin-top:1px;}
+
+  .card-body{
+    display:flex; gap:14px; padding:16px; position:relative; z-index:2;
+  }
+  .card-photo{
+    width:88px; height:104px; border-radius:8px; overflow:hidden; flex-shrink:0;
+    border:2px solid var(--gold); background:#e7e0cc;
+    display:flex; align-items:center; justify-content:center; color:#9a8f6b; font-size:26px;
+  }
+  .card-photo img{width:100%; height:100%; object-fit:cover;}
+  .card-info{flex:1; min-width:0;}
+  .card-info .cf-name{font-size:16.5px; font-weight:800; line-height:1.15; color:var(--ink);}
+  .card-info .cf-roll{
+    font-family:'Space Mono',monospace; font-size:12.5px; color:var(--teal); font-weight:700; margin-top:3px;
+  }
+  .cf-row{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+  .cf-pill{
+    font-size:9.5px; font-weight:700; padding:3px 8px; border-radius:999px;
+    background:rgba(10,24,48,.08); color:var(--navy); border:1px solid rgba(10,24,48,.12);
+    display:inline-flex; align-items:center; gap:4px;
+  }
+  .cf-pill.blood{background:rgba(226,87,76,.12); color:#b5342a; border-color:rgba(226,87,76,.3);}
+  .cf-meta{margin-top:9px; font-size:10.5px; color:#3d4a63; line-height:1.55;}
+  .cf-meta div{display:flex; gap:6px; align-items:flex-start;}
+  .cf-meta i{width:12px; margin-top:2px; color:var(--teal); font-size:10px;}
+
+  .card-bottom{
+    padding:8px 16px 12px; position:relative; z-index:2;
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:1px dashed rgba(10,24,48,.18);
+  }
+  .card-bottom .cb-college{font-size:9px; color:#5a6a8a; font-weight:700; letter-spacing:.3px;}
+  .card-bottom .cb-symbols{font-family:'Space Mono',monospace; font-size:10px; letter-spacing:5px; color:rgba(212,175,55,.7);}
+
+  .card-actions{
+    display:flex; gap:14px; justify-content:center; margin-top:34px; flex-wrap:wrap;
+  }
+
+  .note-box{
+    max-width:400px; margin:26px auto 0; text-align:center;
+    font-size:12.5px; color:var(--muted); line-height:1.7;
+  }
+  .note-box i{color:var(--gold);}
+
+  footer{
+    position:relative; z-index:1;
+    text-align:center; padding:34px 6% 44px; color:var(--muted); font-size:13px;
+    border-top:1px solid rgba(212,175,55,.15);
+  }
+  footer .fa-heart{color:#e2574c;}
+  footer a{color:var(--teal); text-decoration:none;}
+
+  @media (max-width:640px){
+    .form-grid{grid-template-columns:1fr;}
+    nav{display:none;}
+    header{padding:12px 5%;}
+    #idCard{width:92vw; max-width:400px;}
+    .hero{padding:70px 6% 50px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="math-bg" aria-hidden="true">
+  ∑ π √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴ Σ π √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴<br>
+  ∫ Δ θ λ ≠ ∏ ∂ ∴ Σ π √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴ Σ π √<br>
+  λ ≠ ∏ ∂ ∴ Σ π √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴ Σ π √ ∞ ∫<br>
+  √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴ Σ π √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴<br>
+  ∏ ∂ ∴ Σ π √ ∞ ∫ Δ θ λ ≠ ∏ ∂ ∴ Σ π √ ∞ ∫ Δ
+</div>
+
+<header>
+  <div class="brand">
+    <!-- ================= LOGO: paste your batch logo image URL below ================= -->
+    <img id="brandLogo" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhfPat3dm_GlJo87S33iN2WMRAPZsbJ1m2fBo9lX1ojjvQiqw0DLdlHpjLhbEEODnRF6KRxraQAbEU6gYKnORdTGrOb5FgpKP_0UmgK6c2hU0WiU9rjQOS5x71Vt7DQD4R_FdUozk6vSP0uUSXz3K36O9JwFbpn5kHIh9LVMkbw_lHpMsQdWfpD_0U55-s/s1600/%E0%A6%A6%E0%A7%80%E0%A6%A8%20%E0%A6%89%E0%A6%95%E0%A7%8D%E0%A6%A4%E0%A6%BF%20%281200%20x%201200%20px%29_20260516_185816_0000.png" alt="NEUMERIX-54 লোগো"
+         onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <div class="logo-fallback" id="logoFallback" style="display:none;"><i class="fa-solid fa-square-root-variable"></i></div>
+    <div class="brand-text">
+      <div class="name">NEUMERIX-54</div>
+      <div class="dept">গণিত বিভাগ, আনন্দ মোহন কলেজ</div>
+    </div>
+  </div>
+  <nav>
+    <a href="#top"><i class="fa-solid fa-house"></i> হোম</a>
+    <a href="#formSection"><i class="fa-solid fa-pen-to-square"></i> রেজিস্ট্রেশন</a>
+    <a href="#cardSection"><i class="fa-solid fa-id-card"></i> আইডি কার্ড</a>
+  </nav>
+</header>
+
+<div id="top"></div>
+<section class="hero">
+  <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> ৫৪তম ব্যাচ · গণিত বিভাগ</span>
+  <h1>NEUMERIX<span class="num">-54</span></h1>
+  <p>আনন্দ মোহন কলেজ, গণিত বিভাগের ৫৪তম ব্যাচের নিজস্ব পরিচয়। নিচের ফর্মটি পূরণ করে তোমার তথ্য জমা দাও, আর সাথে সাথে পেয়ে যাও তোমার ব্যক্তিগত ডিজিটাল আইডি কার্ড।</p>
+  <div class="hero-actions">
+    <a href="#formSection" class="btn btn-primary"><i class="fa-solid fa-arrow-down"></i> রেজিস্ট্রেশন শুরু করি</a>
+    <a href="#cardSection" class="btn btn-outline"><i class="fa-solid fa-id-card-clip"></i> আমার কার্ড দেখি</a>
+  </div>
+</section>
+
+<!-- ============= FORM SECTION ============= -->
+<section class="panel" id="formSection">
+  <div class="section-head">
+    <div class="tag">STEP 01</div>
+    <h2>রেজিস্ট্রেশন ফর্ম</h2>
+    <p>সঠিক তথ্য দিয়ে ফর্মটি পূরণ করো — এই তথ্য দিয়েই তোমার আইডি কার্ড তৈরি হবে।</p>
+  </div>
+
+  <form class="glass-card" id="regForm" novalidate>
+    <div class="form-grid">
+
+      <div class="field full">
+        <label for="fullName"><i class="fa-solid fa-user"></i> পূর্ণ নাম</label>
+        <input type="text" id="fullName" placeholder="যেমন: মাহিন হোসেন" required>
+      </div>
+
+      <div class="field">
+        <label for="classRoll"><i class="fa-solid fa-hashtag"></i> ক্লাস রোল</label>
+        <input type="text" id="classRoll" inputmode="numeric" placeholder="যেমন: ১২" required>
+      </div>
+
+      <div class="field">
+        <label for="bloodGroup"><i class="fa-solid fa-droplet"></i> রক্তের গ্রুপ</label>
+        <select id="bloodGroup" required>
+          <option value="" disabled selected>নির্বাচন করো</option>
+          <option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option>
+          <option>O+</option><option>O-</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label><i class="fa-solid fa-venus-mars"></i> লিঙ্গ</label>
+        <div class="sex-options">
+          <label><input type="radio" name="sex" value="পুরুষ" required><span><i class="fa-solid fa-mars"></i> পুরুষ (Male)</span></label>
+          <label><input type="radio" name="sex" value="মহিলা"><span><i class="fa-solid fa-venus"></i> মহিলা (Female)</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="phone"><i class="fa-solid fa-phone"></i> যোগাযোগ নম্বর</label>
+        <input type="tel" id="phone" placeholder="যেমন: ০১৭xxxxxxxx" required>
+      </div>
+
+      <div class="field">
+        <label for="address"><i class="fa-solid fa-location-dot"></i> ঠিকানা (সংক্ষেপে)</label>
+        <input type="text" id="address" placeholder="যেমন: ময়মনসিংহ সদর" required>
+      </div>
+
+      <div class="photo-upload">
+        <div class="avatar-box" id="avatarBox"><i class="fa-solid fa-camera"></i></div>
+        <div class="upload-btn-wrap">
+          <label class="upload-label" for="photoInput"><i class="fa-solid fa-upload"></i> ছবি আপলোড করো</label>
+          <input type="file" id="photoInput" accept="image/*" required>
+          <span class="upload-hint">স্পষ্ট, সাম্প্রতিক ছবি দাও (jpg/png)</span>
+        </div>
+      </div>
+
+      <div class="form-msg err" id="formMsg"></div>
+
+      <div class="form-submit-row">
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          <i class="fa-solid fa-paper-plane"></i> রেজিস্ট্রেশন সম্পন্ন করো
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<!-- ============= ID CARD / PROFILE SECTION ============= -->
+<section class="panel" id="cardSection">
+  <div class="success-banner">
+    <i class="fa-solid fa-circle-check"></i>
+    <h2>অভিনন্দন! তোমার আইডি কার্ড প্রস্তুত</h2>
+    <p>নিচে তোমার NEUMERIX-54 ডিজিটাল আইডি কার্ডটি দেখতে পাচ্ছো। এটি এই ব্রাউজারে সংরক্ষিত থাকবে, চাইলে HD মানে PNG ডাউনলোড করে নাও।</p>
+  </div>
+
+  <div class="card-stage">
+    <div id="idCard">
+      <div class="card-watermark">54</div>
+      <div class="card-top">
+        <img class="clogo" id="cardLogo" src="PASTE_YOUR_LOGO_URL_HERE.png" alt=""
+             onerror="this.style.display='none'; document.getElementById('cardLogoFallback').style.display='flex';">
+        <div class="clogo-fallback" id="cardLogoFallback" style="display:none;"><i class="fa-solid fa-square-root-variable"></i></div>
+        <div class="ctext">
+          <div class="cname">NEUMERIX-54</div>
+          <div class="cdept">গণিত বিভাগ &middot; আনন্দ মোহন কলেজ</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-photo" id="cardPhotoBox"><i class="fa-solid fa-user"></i></div>
+        <div class="card-info">
+          <div class="cf-name" id="cfName">নাম</div>
+          <div class="cf-roll mono" id="cfRoll">ROLL — 00</div>
+          <div class="cf-row">
+            <span class="cf-pill blood"><i class="fa-solid fa-droplet"></i> <span id="cfBlood">A+</span></span>
+            <span class="cf-pill"><i class="fa-solid fa-venus-mars"></i> <span id="cfSex">—</span></span>
+          </div>
+          <div class="cf-meta">
+            <div><i class="fa-solid fa-phone"></i> <span id="cfPhone">—</span></div>
+            <div><i class="fa-solid fa-location-dot"></i> <span id="cfAddress">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <span class="cb-college">আনন্দ মোহন কলেজ, ময়মনসিংহ</span>
+        <span class="cb-symbols">∑π√∞</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button class="btn btn-primary" id="downloadBtn"><i class="fa-solid fa-download"></i> HD PNG ডাউনলোড করো</button>
+    <button class="btn btn-ghost" id="editBtn"><i class="fa-solid fa-rotate-left"></i> তথ্য পরিবর্তন করো</button>
+  </div>
+
+  <div class="note-box">
+    <p><i class="fa-solid fa-lock"></i> তোমার তথ্য এই ব্রাউজারে নিরাপদে সংরক্ষিত থাকবে, তাই পরবর্তীতেও এই পেইজে এসে সরাসরি কার্ডটি দেখতে ও ডাউনলোড করতে পারবে।</p>
+  </div>
+</section>
+
+<footer>
+  <p>NEUMERIX-54 &middot; গণিত বিভাগ, আনন্দ মোহন কলেজ &middot; তৈরি করা হয়েছে <i class="fa-solid fa-heart"></i> দিয়ে</p>
+</footer>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'neumerix54_profile_v1';
+  const EMAIL_TO = 'info.itzmahin2006@gmail.com';
+
+  const form = document.getElementById('regForm');
+  const formSection = document.getElementById('formSection');
+  const cardSection = document.getElementById('cardSection');
+  const formMsg = document.getElementById('formMsg');
+  const submitBtn = document.getElementById('submitBtn');
+  const photoInput = document.getElementById('photoInput');
+  const avatarBox = document.getElementById('avatarBox');
+
+  let photoDataUrl = '';
+
+  // ---------- resize/compress uploaded photo ----------
+  function readAndResizeImage(file, maxDim, cb){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = new Image();
+      img.onload = function(){
+        let w = img.width, h = img.height;
+        if (w > h && w > maxDim){ h = Math.round(h * maxDim / w); w = maxDim; }
+        else if (h >= w && h > maxDim){ w = Math.round(w * maxDim / h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        cb(canvas.toDataURL('image/jpeg', 0.9));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  photoInput.addEventListener('change', function(){
+    const file = photoInput.files[0];
+    if (!file) return;
+    readAndResizeImage(file, 700, function(dataUrl){
+      photoDataUrl = dataUrl;
+      avatarBox.innerHTML = '<img src="'+dataUrl+'" alt="প্রোফাইল ছবি">';
+    });
+  });
+
+  function showError(msg){
+    formMsg.textContent = msg;
+    formMsg.classList.add('show');
+  }
+  function clearError(){
+    formMsg.textContent = '';
+    formMsg.classList.remove('show');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    clearError();
+
+    const name = document.getElementById('fullName').value.trim();
+    const roll = document.getElementById('classRoll').value.trim();
+    const blood = document.getElementById('bloodGroup').value;
+    const sexEl = document.querySelector('input[name="sex"]:checked');
+    const sex = sexEl ? sexEl.value : '';
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if (!name || !roll || !blood || !sex || !phone || !address || !photoDataUrl){
+      showError('অনুগ্রহ করে সবগুলো ঘর পূরণ করো এবং একটি ছবি আপলোড করো।');
+      return;
+    }
+
+    const data = { name, roll, blood, sex, phone, address, photo: photoDataUrl, savedAt: Date.now() };
+
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }catch(err){
+      console.warn('localStorage save failed', err);
+    }
+
+    renderCard(data);
+    sendEmail(data);
+    showCardView();
+  });
+
+  // ---------- email via FormSubmit (free, no backend needed) ----------
+  function sendEmail(data){
+    const fd = new FormData();
+    fd.append('পূর্ণ নাম', data.name);
+    fd.append('ক্লাস রোল', data.roll);
+    fd.append('রক্তের গ্রুপ', data.blood);
+    fd.append('লিঙ্গ', data.sex);
+    fd.append('যোগাযোগ নম্বর', data.phone);
+    fd.append('ঠিকানা', data.address);
+    fd.append('_subject', 'NEUMERIX-54 নতুন রেজিস্ট্রেশন: ' + data.name);
+    fd.append('_template', 'table');
+    fd.append('_captcha', 'false');
+
+    fetch('https://formsubmit.co/ajax/' + EMAIL_TO, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: fd
+    }).catch(function(err){
+      console.warn('ইমেইল পাঠানো যায়নি (এটি কার্ড তৈরিতে বাধা দেবে না):', err);
+    });
+  }
+
+  function renderCard(data){
+    document.getElementById('cfName').textContent = data.name;
+    document.getElementById('cfRoll').textContent = 'ROLL — ' + data.roll;
+    document.getElementById('cfBlood').textContent = data.blood;
+    document.getElementById('cfSex').textContent = data.sex;
+    document.getElementById('cfPhone').textContent = data.phone;
+    document.getElementById('cfAddress').textContent = data.address;
+    document.getElementById('cardPhotoBox').innerHTML = '<img src="'+data.photo+'" alt="'+data.name+'">';
+  }
+
+  function showCardView(){
+    formSection.style.display = 'none';
+    cardSection.style.display = 'block';
+    cardSection.scrollIntoView({behavior:'smooth'});
+  }
+
+  function showFormView(){
+    cardSection.style.display = 'none';
+    formSection.style.display = 'block';
+    formSection.scrollIntoView({behavior:'smooth'});
+  }
+
+  document.getElementById('editBtn').addEventListener('click', function(){
+    showFormView();
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    const card = document.getElementById('idCard');
+    const btn = this;
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> তৈরি হচ্ছে...';
+    btn.disabled = true;
+
+    html2canvas(card, {
+      scale: 4,
+      backgroundColor: null,
+      useCORS: true,
+      logging: false
+    }).then(function(canvas){
+      const link = document.createElement('a');
+      const roll = document.getElementById('cfRoll').textContent.replace(/\D/g,'') || 'card';
+      link.download = 'NEUMERIX-54-ID-' + roll + '.png';
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+      btn.innerHTML = original;
+      btn.disabled = false;
+    }).catch(function(err){
+      console.error(err);
+      btn.innerHTML = original;
+      btn.disabled = false;
+      alert('দুঃখিত, ছবি তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করো।');
+    });
+  });
+
+  // ---------- on load: if data already saved, jump straight to card ----------
+  (function init(){
+    try{
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved){
+        const data = JSON.parse(saved);
+        renderCard(data);
+        formSection.style.display = 'none';
+        cardSection.style.display = 'block';
+      }
+    }catch(err){
+      console.warn('saved data load failed', err);
+    }
+  })();
+})();
+</script>
+
+</body>
+</html>
